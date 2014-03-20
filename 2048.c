@@ -368,14 +368,7 @@ void LCDPutStr(char *pString, int x, int y, int fColor, int bColor) {
   }
 }
 
-
-void setup() {
-  pinMode(3, OUTPUT); digitalWrite(3, HIGH);
-  LCDInit();
-  LCDClear(BLACK); delay(100);
-  LCDSetLine(0, 0, 128, 128, WHITE);
-  LCDPutStr("Hello worlds!", 1, 1, WHITE, BLACK);
-}
+const int LED = 11;
 
 // prawo - 504
 // lew ~140
@@ -387,21 +380,33 @@ const int UP = 1;
 const int RIGHT = 2;
 const int DOWN = 3;
 const int LEFT = 4;
+const int last_diod = 1;
 
 void loop() {
   int joystick = analogRead(0);
   char str[10] = "12345";
   int cur_dir = 0;
+  char c = 'a';
   
   if (0 <= joystick && joystick <= 10) {
     cur_dir = UP;
+    c = 'w';
   } else if (130 <= joystick && joystick <= 150) {
     cur_dir = LEFT;
+    c = 'a';
   } else if (320 <= joystick && joystick <= 350) {
     cur_dir = DOWN;
+    c = 's';
   } else if (490 <= joystick && joystick <= 510) {
     cur_dir = RIGHT;
+    c = 'd';
+  } else {
+    c = 'X';
   }
+  if (c !='X') {
+  move(c);
+  }
+  delay(200);
   if (cur_dir != last_dir) {
     switch (cur_dir) {
       case UP:
@@ -423,8 +428,113 @@ void loop() {
     }
     
     last_dir = cur_dir;
-      LCDClear(BLACK);
+    //  LCDClear(BLACK);
 
-    LCDPutStr(str, 1, 1, WHITE, BLACK);
+    //LCDPutStr(str, 1, 1, WHITE, BLACK);
   }
+  
 }
+
+int t[17];
+char *Q,*W="adws",D,x,y,X;
+
+int m(int x, int y){
+    return !D?x+y*4:D==1?3-x+y*4:D==2?y+x*4:y+(3-x)*4;
+}
+
+int c(){
+    for(y=0; y<3; ++y)
+        for(x=0; x<3; ++x){D=t[x+y*4];
+            if(t[x+1+y*4]==D||t[x+4+y*4]==D)x=y=9;
+        }
+    return y>4;
+}
+
+int d(){
+    //if(strlen(t)==16) return 0;
+    while(t[x=(rand()&15)]);
+    return t[x]=1;
+}
+
+void r(char x){
+    putchar(x);
+}
+
+int b(){
+    y=0;
+    r(10);
+    while(y<21) r(y++%5?45:43);
+    r(10);
+}
+
+int f(){
+    for(x=0; x<17; ++x)
+        if(X=(t[x]==11))x=32;
+    return x<18;
+}
+
+void move(char input){
+
+
+      LCDClear(BLACK);
+char sss[10];
+sprintf(sss, "%c", input);
+f(); c(); d();
+    //LCDPutStr(sss, 1, 1, WHITE, BLACK);
+//   while(f()&&(d()||c())){
+        x=0;
+
+        b();
+        r(10);
+        while(!(Q=strchr(W,input)));
+
+        D=Q-W;
+        for(y=0; y<4; ++y)
+            for(X=0,x=1; x<4; ++x)
+                if(t[m(x,y)]){if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++)t[m(x,y)]=0;
+                    X=x;
+                }
+        do{
+            for(y=0; y<4; ++y)
+                for(x=0; x<3; ++x)
+                    if(!t[m(x,y)]&&(X=t[m(x+1,y)]))
+                    {
+                        t[m(x,y)]=X;
+                        t[m(x+1,y)]=0;
+                        x=y=9;
+                    }
+        }while(y>4);
+        for (int i = 0; i < 4; i++) {
+          for (int j = 0; j < 4; j++) {
+            char ss[5];
+            sprintf(ss, "%d|", t[i*4+j]);
+            LCDPutStr(ss, 20+20*j, 20+20*i, WHITE, BLACK);
+          }
+        }
+        char fff[5];
+        sprintf(fff, "%c", input);
+        LCDPutStr(fff, 1, 1, WHITE, BLACK);
+   //  }
+    //puts(X?"you win":"you lose");
+}
+//}
+
+
+void setup() {
+  for (int i = 0; i < 17; i++) { t[i] = 0; }
+
+  pinMode(LED, OUTPUT);
+  pinMode(3, OUTPUT); digitalWrite(3, HIGH);
+  LCDInit();
+  LCDClear(BLACK); delay(100);
+  LCDSetLine(0, 0, 128, 128, WHITE);
+            for (int i = 0; i < 4; i++) {
+          for (int j = 0; j < 4; j++) {
+            char ss[5];
+            sprintf(ss, "%d|", t[i*4+j]);
+            LCDPutStr(ss, 20+20*i, 20+20*j, WHITE, BLACK);
+          }
+            }
+            d();
+}
+
