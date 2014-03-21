@@ -384,6 +384,7 @@ const int last_diod = 1;
 
 int started = 0;
 int t[17];
+long score = 0;
 char *Q,*W="adws",D,x,y,X;
 
 void refresh_display() {
@@ -452,17 +453,6 @@ int add_random_field(){
     return t[x]=1;
 }
 
-void r(char x){
-    putchar(x);
-}
-
-int b(){
-    y=0;
-    r(10);
-    while(y<21) r(y++%5?45:43);
-    r(10);
-}
-
 int f(){
     for(x=0; x<17; ++x)
         if(X=(t[x]==11))x=32;
@@ -475,8 +465,6 @@ void move(char input){
       f(); c(); add_random_field();
         x=0;
 
-        b();
-        r(10);
         while(!(Q=strchr(W,input)));
 
         D=Q-W;
