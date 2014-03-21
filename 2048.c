@@ -400,7 +400,7 @@ void refresh_display() {
     }
   }
   char score_str[25];
-  sprintf(score_str, "Score: %l", score);
+  sprintf(score_str, "Score: %ld", score);
   LCDPutStr(score_str, 5, 2, WHITE, BLACK);
 }
 
