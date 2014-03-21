@@ -399,6 +399,9 @@ void refresh_display() {
       LCDPutStr(ss, 20+26*j, 20+26*i, WHITE, BLACK);
     }
   }
+  char score_str[25];
+  sprintf(score_str, "Score: %l", score);
+  LCDPutStr(score_str, 5, 2, WHITE, BLACK);
 }
 
 void loop() {
@@ -471,7 +474,10 @@ void move(char input){
         for(y=0; y<4; ++y)
             for(X=0,x=1; x<4; ++x)
                 if(t[m(x,y)]){
-                  if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++)t[m(x,y)]=0;
+                  if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++) {
+                    score += 1 << t[m(X,y)];
+                    t[m(x,y)]=0;
+                  }
                   X=x;
                 }
         do{
@@ -490,12 +496,10 @@ void move(char input){
 
 void setup() {
   for (int i = 0; i < 17; i++) { t[i] = 0; }
-
   pinMode(LED, OUTPUT);
   pinMode(3, OUTPUT); digitalWrite(3, HIGH);
   LCDInit();
   LCDClear(BLACK); delay(100);
-  //LCDSetLine(0, 0, 128, 128, WHITE);
   char hello[5] = "2048";
   char start[17] = "Move joystick...";
   LCDPutStr(hello, 50, 50, CYAN, BLACK);
