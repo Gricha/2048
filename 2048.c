@@ -390,8 +390,11 @@ void refresh_display() {
   LCDClear(BLACK);
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
+      int current = t[i*4+j];
+      int to_display = current ? 1 : 0;
+      to_display = to_display << current;
       char ss[5];
-      sprintf(ss, "%d ", t[i*4+j]);
+      sprintf(ss, "%d ", to_display);
       LCDPutStr(ss, 20+26*j, 20+26*i, WHITE, BLACK);
     }
   }
