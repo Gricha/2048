@@ -462,35 +462,63 @@ int f(){
     return x<18;
 }
 
+int b_t[17];
+
+void backup_table() {
+  for (int i = 0; i < 17; ++i) {
+    b_t[i] = t[i];
+  }
+}
+
+int table_changed() {
+  int ret_val = 0;
+  for (int i = 0; i < 17; ++i) {
+    ret_val += (t[i] != b_t[i]);
+  }
+  return ret_val;
+}
+
 void move(char input){
-      char sss[10];
-      sprintf(sss, "%c", input);
-      f(); c(); add_random_field();
-        x=0;
+  char sss[10];
+  sprintf(sss, "%c", input);
 
-        while(!(Q=strchr(W,input)));
+  backup_table();
+  f();
+  c();
+  x=0;
 
-        D=Q-W;
-        for(y=0; y<4; ++y)
-            for(X=0,x=1; x<4; ++x)
-                if(t[m(x,y)]){
-                  if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++) {
-                    score += 1 << t[m(X,y)];
-                    t[m(x,y)]=0;
-                  }
-                  X=x;
-                }
-        do{
-            for(y=0; y<4; ++y)
-                for(x=0; x<3; ++x)
-                    if(!t[m(x,y)]&&(X=t[m(x+1,y)]))
-                    {
-                        t[m(x,y)]=X;
-                        t[m(x+1,y)]=0;
-                        x=y=9;
-                    }
-        }while(y>4);
-        refresh_display();
+  while(!(Q=strchr(W,input)));
+
+  D=Q-W;
+  for(y=0; y<4; ++y) {
+    for(X=0,x=1; x<4; ++x) {
+      if(t[m(x,y)]) {
+        if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++) {
+          score += 1 << t[m(X,y)];
+          t[m(x,y)]=0;
+        }
+        X=x;
+      }
+    }
+  }
+
+  do {
+    for(y=0; y<4; ++y) {
+      for(x=0; x<3; ++x) {
+        if(!t[m(x,y)]&&(X=t[m(x+1,y)])) {
+          t[m(x,y)]=X;
+          t[m(x+1,y)]=0;
+          x=y=9;
+        }
+      }
+    }
+  } while(y>4);
+
+  if (table_changed()) {
+    add_random_field();
+  }
+
+  refresh_display();
 }
 
 
