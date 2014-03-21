@@ -99,7 +99,7 @@ const unsigned char FONT8x16[97][16] = {
 };
 
 //*********************************************
-//				Functions
+//        Functions
 //*********************************************
 void LCDCommand(unsigned char data);
 void LCDData(unsigned char data);
@@ -110,74 +110,74 @@ void LCDSetLine(int x0, int y0, int x1, int y1, int color);
 void LCDSetRect(int x0, int y0, int x1, int y1, unsigned char fill, int color);
 void LCDPutStr(char *pString, int x, int y, int fColor, int bColor);
 //*********************************************
-//	  used PCF-8833 Controller Commands
+//    used PCF-8833 Controller Commands
 //*********************************************
-#define	NOP		   0x00 
-#define	BSTRON	 0x03
-#define	SLEEPOUT 0x11	
-#define	SETCON	 0x25	
-#define DISPON   0x29	
-#define CASET    0x2A	
-#define PASET    0x2B	
-#define RAMWR    0x2C		
-#define	MADCTL	 0x36	
-#define	COLMOD	 0x3A  /* color mode 12/8 bit*/
+#define NOP      0x00 
+#define BSTRON   0x03
+#define SLEEPOUT 0x11 
+#define SETCON   0x25 
+#define DISPON   0x29 
+#define CASET    0x2A 
+#define PASET    0x2B 
+#define RAMWR    0x2C   
+#define MADCTL   0x36 
+#define COLMOD   0x3A  /* color mode 12/8 bit*/
 //************************************************
-//			12-Bit Colors
+//      12-Bit Colors
 //************************************************
-#define BLACK		  0x000
-#define NAVY 		  0x008
-#define BLUE		  0x00F
-#define TEAL 		  0x088
-#define EMERALD	  0x0C5
-#define	GREEN		  0x0F0
-#define CYAN		  0x0FF
-#define SLATE 		0x244
-#define INDIGO  	0x408
-#define TURQUOISE	0x4ED
-#define OLIVE 		0x682
-#define MAROON 		0x800
-#define PURPLE 		0x808
-#define GRAY 		  0x888
-#define SKYBLUE		0x8CE
-#define BROWN		  0xB22
-#define CRIMSON 	0xD13
-#define ORCHID 		0xD7D
-#define RED			  0xF00
-#define MAGENTA		0xF0F
-#define ORANGE 		0xF40
-#define PINK		  0xF6A
-#define CORAL 		0xF75
-#define SALMON 		0xF87
-#define GOLD 		  0xFD0
-#define YELLOW		0xFF0
-#define WHITE		  0xFFF
+#define BLACK     0x000
+#define NAVY      0x008
+#define BLUE      0x00F
+#define TEAL      0x088
+#define EMERALD   0x0C5
+#define GREEN     0x0F0
+#define CYAN      0x0FF
+#define SLATE     0x244
+#define INDIGO    0x408
+#define TURQUOISE 0x4ED
+#define OLIVE     0x682
+#define MAROON    0x800
+#define PURPLE    0x808
+#define GRAY      0x888
+#define SKYBLUE   0x8CE
+#define BROWN     0xB22
+#define CRIMSON   0xD13
+#define ORCHID    0xD7D
+#define RED       0xF00
+#define MAGENTA   0xF0F
+#define ORANGE    0xF40
+#define PINK      0xF6A
+#define CORAL     0xF75
+#define SALMON    0xF87
+#define GOLD      0xFD0
+#define YELLOW    0xFF0
+#define WHITE     0xFFF
 
 // PORT and BIT number for each control pin
 #define _USE_ARDUINO
-//	Arduino duemilanove digital port pins 
-#define	LCD_RES_PIN	9
-#define	CS_PIN		 10
-#define	DIO_PIN		 11
-#define	SCK_PIN		 13
-//	AVR ATmega328p POTRB pins
-#define LCD_RES	1		// D9
-#define CS			2		// D10
-#define DIO			3		// D11
-#define SCK			5		// D13
-//	AVR ATmega328p pin ports
-#define	PORT_CS		PORTB
-#define	PORT_SCK	PORTB
-#define	PORT_RES	PORTB
-#define	PORT_DIO	PORTB
+//  Arduino duemilanove digital port pins 
+#define LCD_RES_PIN 9
+#define CS_PIN     10
+#define DIO_PIN    11
+#define SCK_PIN    13
+//  AVR ATmega328p POTRB pins
+#define LCD_RES 1   // D9
+#define CS      2   // D10
+#define DIO     3   // D11
+#define SCK     5   // D13
+//  AVR ATmega328p pin ports
+#define PORT_CS   PORTB
+#define PORT_SCK  PORTB
+#define PORT_RES  PORTB
+#define PORT_DIO  PORTB
 //*********************************
-//	Macros sb1, cb0
+//  Macros sb1, cb0
 //*********************************
 #define sb1(port, pin)   port = port | (uint8_t)(1 << pin)
 #define cb0(port, pin)   port = port & (uint8_t)~(1 << pin)
 
 //******************************************
-//				LCD_d.c
+//        LCD_d.c
 //******************************************
 #include <string.h>
 #include "Arduino.h"
@@ -192,17 +192,17 @@ char j;
 for (j = 0; j < 8; j++) {
   if ((bajt & 0x80) == 0x80) {sb1(PORT_DIO, DIO);}
   else{cb0(PORT_DIO, DIO);} 
-   delay_us(1);	
-   cb0(PORT_SCK, SCK);	delay_us(1); sb1(PORT_SCK, SCK);  // 01 clock pulse
+   delay_us(1); 
+   cb0(PORT_SCK, SCK);  delay_us(1); sb1(PORT_SCK, SCK);  // 01 clock pulse
   bajt <<= 1;
 }}
 //*********************************************
 //        LCDCommand(RAMWR)
 //*********************************************
 void LCDCommand(unsigned char bajt)  {
-cb0(PORT_CS, CS);		delay_us(1);  // chip enable
-cb0(PORT_DIO, DIO);	delay_us(1);  // output 0 (9th bit 0 = command)
-cb0(PORT_SCK, SCK);	delay_us(1); sb1(PORT_SCK, SCK);  // 01 clock pulse
+cb0(PORT_CS, CS);   delay_us(1);  // chip enable
+cb0(PORT_DIO, DIO); delay_us(1);  // output 0 (9th bit 0 = command)
+cb0(PORT_SCK, SCK); delay_us(1); sb1(PORT_SCK, SCK);  // 01 clock pulse
 bytout(bajt);
 sb1(PORT_CS, CS);   
 }
@@ -210,9 +210,9 @@ sb1(PORT_CS, CS);
 //        LCDData(RAMWR)
 //************************************************
 void LCDData(unsigned char bajt) {
-cb0(PORT_CS, CS);		delay_us(1);  // chip enable
-sb1(PORT_DIO, DIO);	delay_us(1);	// output 1 (9th bit 1 = data)	
-cb0(PORT_SCK, SCK);	delay_us(1); sb1(PORT_SCK, SCK);  // 01 clock pulse
+cb0(PORT_CS, CS);   delay_us(1);  // chip enable
+sb1(PORT_DIO, DIO); delay_us(1);  // output 1 (9th bit 1 = data)  
+cb0(PORT_SCK, SCK); delay_us(1); sb1(PORT_SCK, SCK);  // 01 clock pulse
 bytout(bajt);
 sb1(PORT_CS, CS);
 }
@@ -221,42 +221,42 @@ sb1(PORT_CS, CS);
 //****************************************
 void LCDInit(void) {
 DDRB = ((1<<CS)|(1<<DIO)|(1<<SCK)|(1<<LCD_RES));  // pins as output
-delay(100);							
+delay(100);             
 cb0(PORT_SCK, SCK);
 cb0(PORT_DIO, DIO);      delay_us(10);
-sb1(PORT_CS, CS);	       delay_us(10);
-cb0(PORT_RES, LCD_RES);	 delay(100);	
-sb1(PORT_RES, LCD_RES);	 delay(100);
+sb1(PORT_CS, CS);        delay_us(10);
+cb0(PORT_RES, LCD_RES);  delay(100);  
+sb1(PORT_RES, LCD_RES);  delay(100);
 sb1(PORT_SCK, SCK);
-sb1(PORT_DIO, DIO);      delay_us(10);	
-LCDCommand(SLEEPOUT);	               // Sleep out
-LCDCommand(BSTRON);	                 // Boost on
-LCDCommand(MADCTL);	 LCDData(0xC0);  // Memory Access Control	(C8 ?)
-LCDCommand(COLMOD);	 LCDData(0x03);  // Set Color Mode 03=12bit	(02=8bit)	
-LCDCommand(SETCON);	 LCDData(0x30);  // Set Contrast		
-LCDCommand(NOP);	   delay(100);		
-LCDCommand(DISPON);	          // Display on
+sb1(PORT_DIO, DIO);      delay_us(10);  
+LCDCommand(SLEEPOUT);                // Sleep out
+LCDCommand(BSTRON);                  // Boost on
+LCDCommand(MADCTL);  LCDData(0xC0);  // Memory Access Control (C8 ?)
+LCDCommand(COLMOD);  LCDData(0x03);  // Set Color Mode 03=12bit (02=8bit) 
+LCDCommand(SETCON);  LCDData(0x30);  // Set Contrast    
+LCDCommand(NOP);     delay(100);    
+LCDCommand(DISPON);           // Display on
 }
 //*******************************************
 //        LCDClear(GRAY)
 //*******************************************
 void LCDClear(int color) {
 unsigned int i;
-LCDCommand(PASET);  LCDData(0);  LCDData(131);	
+LCDCommand(PASET);  LCDData(0);  LCDData(131);  
 LCDCommand(CASET);  LCDData(0);  LCDData(131);
 LCDCommand(RAMWR);
-/* 3 bytes for 2 pixels */ 	
+/* 3 bytes for 2 pixels */  
 for (i=0; i < 132*132/2; i++) {
-	LCDData((color >> 4) & 0x00FF);
-	LCDData(((color & 0x0F) << 4) | (color >> 8));
-	LCDData(color & 0x0FF);		
+  LCDData((color >> 4) & 0x00FF);
+  LCDData(((color & 0x0F) << 4) | (color >> 8));
+  LCDData(color & 0x0FF);   
 }}
 //*********************************************
 //        LCDSetPixel(GOLD, 10, 20)
 //*********************************************
 void LCDSetPixel(int color, unsigned char x, unsigned char y) {
-LCDCommand(PASET);	LCDData(y);  LCDData(131);	
-LCDCommand(CASET);	LCDData(x);  LCDData(131);
+LCDCommand(PASET);  LCDData(y);  LCDData(131);  
+LCDCommand(CASET);  LCDData(x);  LCDData(131);
 LCDCommand(RAMWR);
 LCDData((unsigned char)((color >> 4)& 0x00FF));
 LCDData((unsigned char)(((color & 0x0F) << 4 ) | 0x00));
@@ -275,18 +275,18 @@ dy <<= 1; dx <<= 1; // dy,dx = 2*dy,dx
 LCDSetPixel(color, x0, y0);
 //
 if (dx > dy) {
-	int fraction = dy - (dx >> 1);
-	while (x0 != x1) {
-		if (fraction >= 0) {y0 += stepy;  fraction -= dx;}
-		x0 += stepx;  fraction += dy;  LCDSetPixel(color, x0, y0);
-	}
+  int fraction = dy - (dx >> 1);
+  while (x0 != x1) {
+    if (fraction >= 0) {y0 += stepy;  fraction -= dx;}
+    x0 += stepx;  fraction += dy;  LCDSetPixel(color, x0, y0);
+  }
 }
 else {
-	int fraction = dx - (dy >> 1);
-	while (y0 != y1) {
-		if (fraction >= 0) {x0 += stepx;  fraction -= dy;}
-		y0 += stepy;  fraction += dx;  LCDSetPixel(color, x0, y0);
-	}
+  int fraction = dx - (dy >> 1);
+  while (y0 != y1) {
+    if (fraction >= 0) {x0 += stepx;  fraction -= dy;}
+    y0 += stepy;  fraction += dx;  LCDSetPixel(color, x0, y0);
+  }
 }
 }
 //******************************************
@@ -382,12 +382,26 @@ const int DOWN = 3;
 const int LEFT = 4;
 const int last_diod = 1;
 
+int started = 0;
+int t[17];
+char *Q,*W="adws",D,x,y,X;
+
+void refresh_display() {
+  LCDClear(BLACK);
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      char ss[5];
+      sprintf(ss, "%d ", t[i*4+j]);
+      LCDPutStr(ss, 20+26*j, 20+26*i, WHITE, BLACK);
+    }
+  }
+}
+
 void loop() {
+  // Read input
   int joystick = analogRead(0);
-  char str[10] = "12345";
-  int cur_dir = 0;
-  char c = 'a';
-  
+  char c = 'X';
+  int cur_dir = 0;  
   if (0 <= joystick && joystick <= 10) {
     cur_dir = UP;
     c = 'w';
@@ -401,42 +415,19 @@ void loop() {
     cur_dir = RIGHT;
     c = 'd';
   } else {
-    c = 'X';
-  }
-  if (c !='X') {
-  move(c);
-  }
-  delay(200);
-  if (cur_dir != last_dir) {
-    switch (cur_dir) {
-      case UP:
-        sprintf(str, "GORA");
-        break;
-      case DOWN:
-        sprintf(str, "DOL");
-        break;
-      case LEFT:
-        sprintf(str, "LEWO");
-        break;
-      case RIGHT:
-        sprintf(str, "PRAWO");
-        break;
-      default:
-        sprintf(str, "IDLE");
-        break;
-        
-    }
-    
-    last_dir = cur_dir;
-    //  LCDClear(BLACK);
-
-    //LCDPutStr(str, 1, 1, WHITE, BLACK);
+    return;
   }
   
+  if (!started) {
+    started = 1;
+    d();d();
+    refresh_display();
+    
+    return;
+  }
+  
+  move(c);
 }
-
-int t[17];
-char *Q,*W="adws",D,x,y,X;
 
 int m(int x, int y){
     return !D?x+y*4:D==1?3-x+y*4:D==2?y+x*4:y+(3-x)*4;
@@ -451,7 +442,6 @@ int c(){
 }
 
 int d(){
-    //if(strlen(t)==16) return 0;
     while(t[x=(rand()&15)]);
     return t[x]=1;
 }
@@ -474,14 +464,9 @@ int f(){
 }
 
 void move(char input){
-
-
-      LCDClear(BLACK);
-char sss[10];
-sprintf(sss, "%c", input);
-f(); c(); d();
-    //LCDPutStr(sss, 1, 1, WHITE, BLACK);
-//   while(f()&&(d()||c())){
+      char sss[10];
+      sprintf(sss, "%c", input);
+      f(); c(); d();
         x=0;
 
         b();
@@ -491,8 +476,9 @@ f(); c(); d();
         D=Q-W;
         for(y=0; y<4; ++y)
             for(X=0,x=1; x<4; ++x)
-                if(t[m(x,y)]){if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++)t[m(x,y)]=0;
-                    X=x;
+                if(t[m(x,y)]){
+                  if(t[m(x,y)]==t[m(X,y)]&&t[m(X,y)]++)t[m(x,y)]=0;
+                  X=x;
                 }
         do{
             for(y=0; y<4; ++y)
@@ -504,20 +490,8 @@ f(); c(); d();
                         x=y=9;
                     }
         }while(y>4);
-        for (int i = 0; i < 4; i++) {
-          for (int j = 0; j < 4; j++) {
-            char ss[5];
-            sprintf(ss, "%d|", t[i*4+j]);
-            LCDPutStr(ss, 20+20*j, 20+20*i, WHITE, BLACK);
-          }
-        }
-        char fff[5];
-        sprintf(fff, "%c", input);
-        LCDPutStr(fff, 1, 1, WHITE, BLACK);
-   //  }
-    //puts(X?"you win":"you lose");
+        refresh_display();
 }
-//}
 
 
 void setup() {
@@ -527,14 +501,11 @@ void setup() {
   pinMode(3, OUTPUT); digitalWrite(3, HIGH);
   LCDInit();
   LCDClear(BLACK); delay(100);
-  LCDSetLine(0, 0, 128, 128, WHITE);
-            for (int i = 0; i < 4; i++) {
-          for (int j = 0; j < 4; j++) {
-            char ss[5];
-            sprintf(ss, "%d|", t[i*4+j]);
-            LCDPutStr(ss, 20+20*i, 20+20*j, WHITE, BLACK);
-          }
-            }
-            d();
+  //LCDSetLine(0, 0, 128, 128, WHITE);
+  char hello[5] = "2048";
+  char start[17] = "Move joystick...";
+  LCDPutStr(hello, 50, 50, CYAN, BLACK);
+  LCDPutStr(start, 5, 75, YELLOW, BLACK);
 }
+
 
