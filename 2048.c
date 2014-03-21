@@ -423,7 +423,8 @@ void loop() {
   
   if (!started) {
     started = 1;
-    d();d();
+    add_random_field();
+    add_random_field();
     refresh_display();
     
     return;
@@ -444,8 +445,10 @@ int c(){
     return y>4;
 }
 
-int d(){
+int add_random_field(){
     while(t[x=(rand()&15)]);
+    if (rand() % 100 < 10)
+      return t[x]=2;
     return t[x]=1;
 }
 
@@ -469,7 +472,7 @@ int f(){
 void move(char input){
       char sss[10];
       sprintf(sss, "%c", input);
-      f(); c(); d();
+      f(); c(); add_random_field();
         x=0;
 
         b();
